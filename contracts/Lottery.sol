@@ -5,12 +5,17 @@ contract Lottery {
   address public manager;
   address[] public players;
 
+  event playerEntered(address indexed _from, uint _value);
+
   modifier minEther() {
     require(msg.value > .01 ether, "Send more then .01 ether");
     _;
   }
 
-  event playerEntered(address indexed _from, uint _value);
+  modifier isManager() {
+    require(msg.sender == manager, "Must be manager of contract");
+    _;
+  }
 
   constructor () {
     manager = msg.sender;
@@ -23,5 +28,13 @@ contract Lottery {
   function enter() public payable minEther {
     players.push(msg.sender);
     emit playerEntered(msg.sender, msg.value);
+  }
+
+  function random() private view returns (uint) {
+    return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
+  }
+
+  function pickWinner() public payable isManager {
+
   }
 }
