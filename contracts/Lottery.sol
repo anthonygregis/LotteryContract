@@ -6,6 +6,7 @@ contract Lottery {
   address[] public players;
 
   event playerEntered(address indexed _from, uint _value);
+  event winnerPicked(address indexed winner, uint pot);
 
   modifier minEther() {
     require(msg.value > .01 ether, "Send more then .01 ether");
@@ -36,6 +37,11 @@ contract Lottery {
   }
 
   function pickWinner() public payable isManager {
+    uint index = random() % players.length;
+    address payable winner = payable(players[index]);
+    uint pot = address(this).balance;
 
+    winner.transfer(pot);
+    emit winnerPicked(winner, pot);
   }
 }
