@@ -37,8 +37,11 @@ contract Lottery {
   }
 
   function pickWinner() public payable isManager {
+    // Get winning player with psuedo random number
     uint index = random() % players.length;
+    // Convert winner address into a payable address (Supports ^0.8.0 solidity)
     address payable winner = payable(players[index]);
+    // Get current balance of contract
     uint pot = address(this).balance;
 
     winner.transfer(pot);
