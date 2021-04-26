@@ -22,15 +22,6 @@ contract Lottery {
     manager = msg.sender;
   }
 
-  function getPlayers() public view returns (address[] memory) {
-    return players;
-  }
-
-  function enter() public payable minEther {
-    players.push(msg.sender);
-    emit playerEntered(msg.sender, msg.value);
-  }
-
   // BAD - Anyone can figure out how your random function selects its number and exploit this
   function random() private view returns (uint) {
     return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
@@ -39,6 +30,15 @@ contract Lottery {
   function restartLottery() private {
     // Initiates variable back to a dynamic array of addresses with 0 values
     players = new address[](0);
+  }
+
+  function getPlayers() public view returns (address[] memory) {
+    return players;
+  }
+
+  function enter() public payable minEther {
+    players.push(msg.sender);
+    emit playerEntered(msg.sender, msg.value);
   }
 
   function pickWinner() public payable isManager {
