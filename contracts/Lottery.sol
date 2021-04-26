@@ -36,6 +36,11 @@ contract Lottery {
     return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
   }
 
+  function restartLottery() private {
+    // Initiates variable back to a dynamic array of addresses with 0 values
+    players = new address[](0);
+  }
+
   function pickWinner() public payable isManager {
     // Get winning player with psuedo random number
     uint index = random() % players.length;
@@ -46,5 +51,6 @@ contract Lottery {
 
     winner.transfer(pot);
     emit winnerPicked(winner, pot);
+    restartLottery();
   }
 }
