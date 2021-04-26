@@ -30,6 +30,7 @@ contract Lottery {
     emit playerEntered(msg.sender, msg.value);
   }
 
+  // BAD - Anyone can figure out how your random function selects its number and exploit this
   function random() private view returns (uint) {
     return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players)));
   }
