@@ -19,6 +19,7 @@ const deploy = async () => {
     .deploy({ data: bytecode, arguments: [] })
     .send({ from: accounts[0], gas: "1000000" });
 
+  console.log("Interface:", JSON.stringify(interface));
   console.log(
     "Contract Deployed:",
     `https://rinkeby.etherscan.io/address/${newContract.options.address}`
